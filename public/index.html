@@ -1,36 +1,58 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Omegle Clone</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>Omegle Clone - Modern UI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100">
-  <h1>Omegle Clone</h1>
-  <video id="localVideo" autoplay muted></video>
-  <video id="remoteVideo" autoplay></video>
-  <div id="status">Connecting...</div>
+<body class="bg-gray-100 h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="bg-blue-600 text-white p-4 text-2xl font-bold text-center shadow">
+    Omegle Clone
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-1 flex flex-col md:flex-row overflow-hidden">
+    <!-- Video Area -->
+    <section class="flex-1 flex flex-col items-center justify-center p-4">
+      <div class="flex flex-col md:flex-row gap-4 w-full justify-center">
+        <video id="localVideo" class="rounded-lg shadow-lg bg-black w-full md:w-1/2 h-64 object-cover" autoplay muted></video>
+        <video id="remoteVideo" class="rounded-lg shadow-lg bg-black w-full md:w-1/2 h-64 object-cover" autoplay></video>
+      </div>
+      <!-- Call Controls -->
+      <div class="flex gap-4 mt-6">
+        <button id="muteBtn" class="p-3 rounded-full bg-gray-300 hover:bg-gray-400" title="Mute/Unmute">
+          🎤
+        </button>
+        <button id="videoBtn" class="p-3 rounded-full bg-gray-300 hover:bg-gray-400" title="Toggle Video">
+          🎥
+        </button>
+        <button id="shareBtn" class="p-3 rounded-full bg-gray-300 hover:bg-gray-400" title="Share Screen">
+          🖥️
+        </button>
+        <button id="endBtn" class="p-3 rounded-full bg-red-500 text-white hover:bg-red-600" title="End Call">
+          ❌
+        </button>
+      </div>
+      <div id="status" class="mt-4 text-lg text-gray-700"></div>
+    </section>
+
+    <!-- Chat Sidebar -->
+    <aside class="w-full md:w-1/3 bg-white flex flex-col border-l shadow-inner">
+      <div class="p-4 border-b font-semibold text-gray-700">Chat</div>
+      <div id="messages" class="flex-1 p-4 overflow-auto space-y-2"></div>
+      <div class="p-4 border-t flex gap-2">
+        <input id="message-input" type="text" class="flex-1 border rounded p-2" placeholder="Type a message...">
+        <button onclick="sendMessage()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Send</button>
+      </div>
+    </aside>
+  </main>
+
+  <!-- Socket.io and your JS -->
   <script src="/socket.io/socket.io.js"></script>
-<script src="client.js"></script>
-<!-- Add to index.html -->
-<div id="chat-container">
-  <div id="messages"></div>
-  <input type="text" id="message-input" placeholder="Type message...">
-  <button onclick="sendMessage()">Send</button>
-</div>
-<button id="hangupButton" onclick="hangUp()">Disconnect</button>
-
-  <div class="container mx-auto p-4">
-    <div class="grid grid-cols-2 gap-4">
-      <video class="w-full h-64 bg-gray-800 rounded-lg" id="localVideo"></video>
-      <video class="w-full h-64 bg-gray-800 rounded-lg" id="remoteVideo"></video>
-    </div>
-    <!-- Add chat and buttons here -->
-  </div>
-  <button onclick="reportUser()" class="bg-red-500 text-white p-2 rounded">
-  Report User
-</button>
-
+  <script src="client.js"></script>
 </body>
-
 </html>
