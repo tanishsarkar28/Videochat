@@ -3,13 +3,34 @@
 <head>
   <title>Omegle Clone</title>
   <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-gray-100">
   <h1>Omegle Clone</h1>
   <video id="localVideo" autoplay muted></video>
   <video id="remoteVideo" autoplay></video>
   <div id="status">Connecting...</div>
   <script src="/socket.io/socket.io.js"></script>
-  <script src="client.js"></script>
+<script src="client.js"></script>
+<!-- Add to index.html -->
+<div id="chat-container">
+  <div id="messages"></div>
+  <input type="text" id="message-input" placeholder="Type message...">
+  <button onclick="sendMessage()">Send</button>
+</div>
+<button id="hangupButton" onclick="hangUp()">Disconnect</button>
+
+  <div class="container mx-auto p-4">
+    <div class="grid grid-cols-2 gap-4">
+      <video class="w-full h-64 bg-gray-800 rounded-lg" id="localVideo"></video>
+      <video class="w-full h-64 bg-gray-800 rounded-lg" id="remoteVideo"></video>
+    </div>
+    <!-- Add chat and buttons here -->
+  </div>
+  <button onclick="reportUser()" class="bg-red-500 text-white p-2 rounded">
+  Report User
+</button>
+
 </body>
+
 </html>

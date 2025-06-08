@@ -65,3 +65,50 @@ function startWebRTC(isCaller) {
       .then(() => socket.emit('signal', { sdp: peerConnection.localDescription }));
   }
 }
+// In client.js
+let dataChannel;
+
+function setupDataChannel(isCaller) {
+  if (isCaller) {
+    dataChannel = peerConnection.createDataChannel("chat");
+  } else {
+    peerConnection.ondatachannel = (event) => {
+      dataChannel = event.channel;
+    };
+  }
+
+  dataChannel.onmessage = (event) => {
+    const messagesDiv = document.getElementById('messages');
+    messagesDiv.innerHTML += `<div>${event.data}</div>`;
+  };
+}
+
+function sendMessage() {
+  const input = document.getElementById('message-input');
+  dataChannel.send(input.value);
+  input.value = '';
+}
+
+// Modify startWebRTC function
+function startWebRTC(isCaller) {
+  // ... existing code ...
+  setupDataChannel(isCaller);
+}
+function hangUp() {
+  peerConnection.close();
+  localStream.getTracks().forEach(track => track.stop());
+  socket.emit('disconnect-peer');
+  document.getElementById('status').textContent = "Call ended";
+}
+// In server.js
+io.on('connection', (socket) => {
+  socket.on('report-user', (reportedId) => {
+    // Log report to database
+    console.log(`User ${socket.id} reported ${reportedId}`);
+  });
+});
+function reportUser() {
+  if (peerConnection) {
+    socket.emit('report-user', peerConnection.id);
+  }
+}
