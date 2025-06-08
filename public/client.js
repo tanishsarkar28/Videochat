@@ -21,18 +21,33 @@ let isVideoOff = false;
 let isScreenSharing = false;
 let screenStream;
 
-// ICE servers: add your TURN server here for production
+// ICE servers: STUN + public TURN for demo/testing
 const rtcConfig = {
   iceServers: [
-    { urls: 'stun:stun.l.google.com:19302' }
-    // { urls: 'turn:your-turn-server:3478', username: 'user', credential: 'pass' }
+    { urls: 'stun:stun.l.google.com:19302' },
+    { urls: 'stun:stun1.l.google.com:19302' },
+    {
+      urls: 'turn:openrelay.metered.ca:80',
+      username: 'openrelayproject',
+      credential: 'openrelayproject'
+    },
+    {
+      urls: 'turn:openrelay.metered.ca:443',
+      username: 'openrelayproject',
+      credential: 'openrelayproject'
+    },
+    {
+      urls: 'turn:openrelay.metered.ca:443?transport=tcp',
+      username: 'openrelayproject',
+      credential: 'openrelayproject'
+    }
   ]
 };
 
 // === Utility: Add Message Bubble ===
 function addMessage(text, fromMe = false) {
   const bubble = document.createElement('div');
-  bubble.className = `p-2 rounded-lg max-w-xs break-words ${fromMe ? 'bg-blue-500 text-white self-end ml-auto' : 'bg-gray-200 text-gray-900 self-start mr-auto'}`;
+  bubble.className = `p-2 rounded-lg max-w-xs break-words mb-1 ${fromMe ? 'bg-blue-500 text-white self-end ml-auto' : 'bg-gray-200 text-gray-900 self-start mr-auto'}`;
   bubble.textContent = text;
   messagesDiv.appendChild(bubble);
   messagesDiv.scrollTop = messagesDiv.scrollHeight;
@@ -60,7 +75,7 @@ async function initMedia() {
     statusDiv.textContent = "Waiting for a partner...";
     socket.emit('join');
   } catch (err) {
-    statusDiv.textContent = "Could not access camera/microphone.";
+    statusDiv.textContent = "Could not access camera/microphone. Please allow permissions and use HTTPS.";
     console.error(err);
   }
 }
@@ -201,29 +216,6 @@ function stopScreenShare() {
   isScreenSharing = false;
   shareBtn.textContent = "🖥️";
 }
-const rtcConfig = {
-  iceServers: [
-    { urls: 'stun:stun.l.google.com:19302' },
-    { urls: 'stun:stun1.l.google.com:19302' },
-    {
-      urls: 'turn:openrelay.metered.ca:80',
-      username: 'openrelayproject',
-      credential: 'openrelayproject'
-    },
-    {
-      urls: 'turn:openrelay.metered.ca:443',
-      username: 'openrelayproject',
-      credential: 'openrelayproject'
-    },
-    {
-      urls: 'turn:openrelay.metered.ca:443?transport=tcp',
-      username: 'openrelayproject',
-      credential: 'openrelayproject'
-    }
-  ]
-};
-
-
 
 // === Start Everything ===
 initMedia();
