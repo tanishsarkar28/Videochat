@@ -112,6 +112,17 @@ function createPeerConnection(isInitiator) {
       setupDataChannel();
     };
   }
+
+  // Debug ICE connection state
+  peerConnection.oniceconnectionstatechange = () => {
+    console.log("ICE connection state:", peerConnection.iceConnectionState);
+    if (peerConnection.iceConnectionState === "failed") {
+      statusDiv.textContent = "Connection failed. Try refreshing!";
+    }
+    if (peerConnection.iceConnectionState === "connected") {
+      statusDiv.textContent = "Connected!";
+    }
+  };
 }
 
 function setupDataChannel() {
